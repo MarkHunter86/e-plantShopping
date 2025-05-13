@@ -9,28 +9,50 @@ const CartItem = ({ onContinueShopping }) => {
 
   // Calculate total amount for all products in the cart
   const calculateTotalAmount = () => {
- 
+    let total_amount = 0;
+    cart.forEach(item => {
+      const itemCost = parseFloat(item.cost.replace('$', '')); // 去除貨幣符號並轉換為數字
+      total_amount += item.quantity * itemCost; // 累加總金額
+    });
+    return total_amount;
   };
+  
 
   const handleContinueShopping = (e) => {
-   
+    onContinueShopping(e); 
   };
 
 
 
-  const handleIncrement = (item) => {
-  };
+const handleIncrement = (item) => {
+  dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 })); // 更新數量到 Redux
+};
 
-  const handleDecrement = (item) => {
-   
-  };
+
+const handleDecrement = (item) => {
+  if (item.quantity > 1) {
+    dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 })); // 更新數量到 Redux
+  }
+  else{
+    dispatch(removeItem(item));
+}
+};
+
 
   const handleRemove = (item) => {
-  };
+    dispatch(removeItem(item));
+};
 
   // Calculate total cost based on quantity for an item
   const calculateTotalCost = (item) => {
+    const itemCost = parseFloat(item.cost.replace('$', '')); // 去除貨幣符號並轉換為數字
+    return item.quantity * itemCost; // 返回單個商品的總金額
   };
+  
+
+    const handleCheckoutShopping = (e) => {
+    alert('Functionality to be added for future reference');
+    };
 
   return (
     <div className="cart-container">
@@ -57,12 +79,10 @@ const CartItem = ({ onContinueShopping }) => {
       <div className="continue_shopping_btn">
         <button className="get-started-button" onClick={(e) => handleContinueShopping(e)}>Continue Shopping</button>
         <br />
-        <button className="get-started-button1">Checkout</button>
+        <button className="get-started-button1"  onClick={(e) => handleCheckoutShopping(e)}>Checkout</button>
       </div>
     </div>
   );
 };
 
 export default CartItem;
-
-
